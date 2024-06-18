@@ -1,11 +1,10 @@
 #include <iostream>
 #include "hal/joystick.h"
+#include "hal/accelerometer.h"
 using namespace std;
 
 int main(){
-    joystick_init();
-    while(1){
-
-    }
+    
+    Accelerometer acc = Accelerometer();
     return 0;
 }

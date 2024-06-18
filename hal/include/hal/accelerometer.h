@@ -1,0 +1,7 @@
+class Accelerometer{
+    public:
+        Accelerometer(){
+
+        }
+        
+};

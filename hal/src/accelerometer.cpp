@@ -87,20 +87,3 @@ int Accelerometer::getY(){
 int Accelerometer::getZ(){
     return this->z;
 }
-
-// void accThreadFn(std::unique_ptr<Accelerometer> acc){
-    
-//     while(1){
-//         acc->updateAccValues();
-//         sleepThread(10);
-//     }
-//     std::cout<<"thread ended"<<std::endl;
-//     return;
-// }
-// void acc_init(){
-    
-//     std::unique_ptr<Accelerometer> acc = std::make_unique<Accelerometer>();
-//     std::thread accThread(accThreadFn, std::move(acc));
-//     std::cout<<"thread exectured"<<std::endl;
-//     accThread.detach();
-// }

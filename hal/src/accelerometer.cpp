@@ -1,6 +1,7 @@
 #include "accelerometer.h"
 #include "usefulFunc.h"
 #include <vector>
+#include <thread>
 #include <iostream>
 #include <fstream>
 #include <unistd.h>
@@ -59,12 +60,10 @@ void Accelerometer::updateAccValues(){
     if (res != buff.size()) {
         throw std::runtime_error("ERROR: Unable to read in i2c register");
     }
-    for(unsigned int i = 0; i < buff.size(); i++){
-        std::cout<<buff[i]<<std::endl;
-    }
-    this->x = (static_cast<int16_t>(buff[OUT_X_MSB]) << 8) | buff[OUT_X_LSB];
-    this->y = (static_cast<int16_t>(buff[OUT_Y_MSB]) << 8) | buff[OUT_Y_LSB];
-    this->z = (static_cast<int16_t>(buff[OUT_Z_MSB]) << 8) | buff[OUT_Z_LSB];
+    
+    this->x = ((static_cast<int16_t>(buff[OUT_X_MSB]) << 8) | buff[OUT_X_LSB])/16000;
+    this->y = ((static_cast<int16_t>(buff[OUT_Y_MSB]) << 8) | buff[OUT_Y_LSB])/16000;
+    this->z = ((static_cast<int16_t>(buff[OUT_Z_MSB]) << 8) | buff[OUT_Z_LSB])/16000;
     
     return;
 }
@@ -89,3 +88,19 @@ int Accelerometer::getZ(){
     return this->z;
 }
 
+// void accThreadFn(std::unique_ptr<Accelerometer> acc){
+    
+//     while(1){
+//         acc->updateAccValues();
+//         sleepThread(10);
+//     }
+//     std::cout<<"thread ended"<<std::endl;
+//     return;
+// }
+// void acc_init(){
+    
+//     std::unique_ptr<Accelerometer> acc = std::make_unique<Accelerometer>();
+//     std::thread accThread(accThreadFn, std::move(acc));
+//     std::cout<<"thread exectured"<<std::endl;
+//     accThread.detach();
+// }

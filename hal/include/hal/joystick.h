@@ -21,4 +21,3 @@ class Joystick {
         JoystickDirection direction;
 };
 
-void joystick_init();

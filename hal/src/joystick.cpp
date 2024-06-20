@@ -50,19 +50,19 @@ JoystickDirection Joystick::getJoystickDirection(){
     return this->direction;
 }
 
-void joystickThreadFn(std::unique_ptr<Joystick> joystick){
+// void joystickThreadFn(std::unique_ptr<Joystick> joystick){
     
-    while(joystick->getJoystickDirection() != DOWN){
-        joystick->updateDirection();
-        sleepThread(10);
-    }
-    std::cout<<"thread ended"<<std::endl;
-    return;
-}
-void joystick_init(){
+//     while(joystick->getJoystickDirection() != DOWN){
+//         joystick->updateDirection();
+//         sleepThread(10);
+//     }
+//     std::cout<<"thread ended"<<std::endl;
+//     return;
+// }
+// void joystick_init(){
     
-    std::unique_ptr<Joystick> joystick = std::make_unique<Joystick>();
-    std::thread joystickThread(joystickThreadFn, std::move(joystick));
-    std::cout<<"thread exectured"<<std::endl;
-    joystickThread.detach();
-}
+//     std::unique_ptr<Joystick> joystick = std::make_unique<Joystick>();
+//     std::thread joystickThread(joystickThreadFn, std::move(joystick));
+//     std::cout<<"thread exectured"<<std::endl;
+//     joystickThread.detach();
+// }

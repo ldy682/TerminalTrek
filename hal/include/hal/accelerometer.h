@@ -13,11 +13,11 @@ class Accelerometer{
         int getX();
         int getY();
         int getZ();
-        void updateAccValues(int i2cFileDesc, 
-                            unsigned char regAddr);
+        void updateAccValues();
     private:
-        int x;
-        int y;
-        int z;
+        int16_t x;
+        int16_t y;
+        int16_t z;
         int i2cFileDesc;
+        unsigned char regAddr;
 }; 

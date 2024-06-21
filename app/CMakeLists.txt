@@ -8,5 +8,5 @@ target_link_libraries(myProject LINK_PRIVATE hal pthread)
 add_custom_command(TARGET myProject POST_BUILD 
   COMMAND "${CMAKE_COMMAND}" -E copy 
      "$<TARGET_FILE:myProject>"
-     "~/Projects/myApps/beatbox" 
+     "~/Projects/myApps/endlessRun" 
   COMMENT "Copying ARM executable to public NFS directory")

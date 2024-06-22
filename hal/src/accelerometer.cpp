@@ -33,20 +33,22 @@ Accelerometer::Accelerometer(){
 }
 
 Accelerometer::~Accelerometer(){
-    runCommand("config-pin p9.17 default");
-    runCommand("config-pin p9.18 default");
+    // runCommand("config-pin p9.17 default");
+    // runCommand("config-pin p9.18 default");
     std::cout<<"Accelerometer deconstructor called"<<std::endl;
 }
+
 
 static void writeI2cReg(int i2cFileDesc, unsigned char regAddr,
                         unsigned char value)
 {
-    std::vector<unsigned char> buff(2);
-    buff.push_back(regAddr);
-    buff.push_back(value);
-    int res = write(i2cFileDesc, &buff, 2);
-    if (res != 2) {
-        throw std::runtime_error("ERROR: Unable to write in i2c register");
+        unsigned char buff[2];
+        buff[0] = regAddr;
+        buff[1] = value;
+        int res = write(i2cFileDesc, buff, 2);
+        if (res != 2) {
+        perror("I2C: Unable to write i2c register.");
+        exit(1);
     }
 }
 
@@ -60,13 +62,13 @@ void Accelerometer::updateAccValues(){
     if (res != buff.size()) {
         throw std::runtime_error("ERROR: Unable to read in i2c register");
     }
-    
-    this->x = ((static_cast<int16_t>(buff[OUT_X_MSB]) << 8) | buff[OUT_X_LSB])/16000;
-    this->y = ((static_cast<int16_t>(buff[OUT_Y_MSB]) << 8) | buff[OUT_Y_LSB])/16000;
-    this->z = ((static_cast<int16_t>(buff[OUT_Z_MSB]) << 8) | buff[OUT_Z_LSB])/16000;
+    // values received will be -17000 to 17000
+    this->x = ((static_cast<int16_t>(buff[OUT_X_MSB]) << 8) | buff[OUT_X_LSB]);
+    this->y = ((static_cast<int16_t>(buff[OUT_Y_MSB]) << 8) | buff[OUT_Y_LSB]);
+    this->z = ((static_cast<int16_t>(buff[OUT_Z_MSB]) << 8) | buff[OUT_Z_LSB]);
     
     return;
-}
+} 
 
 static int initI2cBus(const char* bus, int address)
 {

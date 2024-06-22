@@ -1,18 +1,21 @@
 #include <iostream>
+#include <thread>
 #include "myThreads.h"
+#include "terminal.h"
+#include "hal/accelerometer.h"
 using namespace std;
 
 int main(){
     joystick_init();
-    acc_init();
+    accTerminal_init();
     wait_shutdown();
     // Accelerometer acc = Accelerometer();
     // while(1){
     //     acc.updateAccValues();
-    //     std::cout<<"X: " << acc.getX()<<std::endl;
-    //     std::cout<<"Y: " << acc.getY()<<std::endl;
-    //     std::cout<<"Z: " << acc.getZ()<<std::endl;
+        
     //     sleepThread(1000);
     // }
+
+    
     return 0;
 }

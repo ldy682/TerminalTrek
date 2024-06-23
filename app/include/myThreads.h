@@ -1,3 +1,2 @@
-void joystick_init();
-void accTerminal_init();
+void app_init();
 void wait_shutdown();

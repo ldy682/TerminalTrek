@@ -2,6 +2,7 @@
 using namespace std;
 
 Terminal::Terminal(){
+    hit = false;
     rows = 15;
     cols = 15;
     playerPos = cols/2;
@@ -24,17 +25,20 @@ Terminal::Terminal(){
     }
 }
 Terminal::~Terminal(){
-
+    cout<<"Terminal deconstructor called"<<endl;
 }
 void Terminal::printGrid(){
     for(int y = 0; y < rows; y++){
         for(int x = 0; x < cols; x++){
-            if(y==rows-1 && x == playerPos){
-                cout<<"O";
-            }
-            else if(obstacles[y] == x){
+            if(obstacles[y] == x){
+                if(x == playerPos && y == rows-1){
+                    hit = true;
+                }
                 // could probably add the endgame logic in here!!!!!!!!!!!!!!!!!
                 cout<<"X";
+            }
+            else if(y==rows-1 && x == playerPos){
+                cout<<"O";
             }
             else{
                 cout<<charGrid[y][x];
@@ -44,6 +48,14 @@ void Terminal::printGrid(){
     }
     // sleepThread(100);
     // system("clear");
+}
+
+void Terminal::restartGame(){
+    // for(long unsigned int i = 0; i < obstacles.size(); i++){
+    //     obstacles[i] = -1;
+    // }
+    std::fill(obstacles.begin(), obstacles.end(), -1);
+    hit = false;
 }
 
 void Terminal::generateObstacle(){

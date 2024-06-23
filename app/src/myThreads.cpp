@@ -11,6 +11,10 @@
 #include <cstring>
 #include <string>
 #include <cmath>
+#include <chrono>
+using std::cout;
+using std::endl;
+using namespace std::chrono;
 
 bool stop = false;
 
@@ -36,64 +40,80 @@ static void accPlayerThreadFn(std::unique_ptr<Accelerometer> acc,
                 terminal->moveRight();
                 terminal->moveRight();
                 break;
+            default:
+                break;
         }
-        // std::cout<<acc->getX()<<std::endl;
-        // terminal->printGrid();
         sleepThread(100);
-        // system("clear");
     }
     std::cout<<"thread ended"<<std::endl;
     return;
 }
 
-static void joystickThreadFn(std::unique_ptr<Joystick> joystick){
+static void joystickThreadFn(std::unique_ptr<Joystick> joystick,
+                            std::shared_ptr<Terminal> terminal){
     
     while(!stop){
         joystick->updateDirection();
-        if(joystick->getJoystickDirection() == DOWN){
-            stop = true;
+        switch (joystick->getJoystickDirection()){
+            case UP:
+                terminal->restartGame();
+                break;
+            case DOWN:
+                stop = true;
+            default:
+                break;
         }
         sleepThread(10);
     }
-    std::cout<<"thread ended"<<std::endl;
     return;
-}
-void joystick_init(){
-    
-    std::unique_ptr<Joystick> joystick = std::make_unique<Joystick>();
-    std::thread joystickThread(joystickThreadFn, std::move(joystick));
-    std::cout<<"joystick thread executed"<<std::endl;
-    joystickThread.detach();
 }
 
 static void obstacleThreadFn(std::shared_ptr<Terminal> terminal){
     while(!stop){
         terminal->generateObstacle();
-        sleepThread(500);
+        sleepThread(300);
     }
 }
 
 void mapPrintThreadFn(std::shared_ptr<Terminal> terminal){
-    while(!stop){
-        system("clear");
-        terminal->printGrid();
-        sleepThread(100);
+    
+    while(!stop && !terminal->hit){
+        auto start = high_resolution_clock::now();
+        while(!terminal->hit){
+            system("clear");
+            terminal->printGrid();
+            sleepThread(100);
+        }
+        auto end = high_resolution_clock::now();
+        auto duration = duration_cast<milliseconds>(end - start);
+        cout<<"Time survived in ms: "<<duration.count()<<endl;
+        cout<<"Joystick Up: Game restart "<<endl;
+        cout<<"Joystick Down: Quit game"<<endl;
+        // system("clear");
+        
     }
 }
 
-void accTerminal_init(){
+void app_init(){
     std::shared_ptr<Terminal> terminalPtr1 = std::make_shared<Terminal>();
     std::shared_ptr<Terminal> terminalPtr2 = terminalPtr1;
     std::shared_ptr<Terminal> terminalPtr3 = terminalPtr1;
-    std::unique_ptr<Accelerometer> acc = std::make_unique<Accelerometer>();
+    std::shared_ptr<Terminal> terminalPtr4 = terminalPtr1;
 
-    std::thread terminalBoardTh(obstacleThreadFn, std::move(terminalPtr1));
+    std::unique_ptr<Accelerometer> acc = std::make_unique<Accelerometer>();
+    std::unique_ptr<Joystick> joystick = std::make_unique<Joystick>();
+
+    // load the threads with hardware first
+    std::thread joystickThread(joystickThreadFn, std::move(joystick), std::move(terminalPtr1));
     std::thread accPlayerTh(accPlayerThreadFn, std::move(acc), std::move(terminalPtr2));
-    std::thread mapPrintTh(mapPrintThreadFn, std::move(terminalPtr3));
+    std::thread terminalBoardTh(obstacleThreadFn, std::move(terminalPtr3));
+    std::thread mapPrintTh(mapPrintThreadFn, std::move(terminalPtr4));
+
     std::cout<<"terminal threads executed"<<std::endl;
     terminalBoardTh.detach();
     accPlayerTh.detach();
     mapPrintTh.detach();
+    joystickThread.detach();
 }
 
 

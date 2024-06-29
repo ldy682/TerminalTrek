@@ -6,7 +6,7 @@ Terminal::Terminal(){
     rows = 15;
     cols = 15;
     playerPos = cols/2;
-    // charGrid(rows, vector<char>(cols, ' '));
+
     // initializes the grid
     charGrid.resize(rows, std::vector<char>(cols, ' '));
 
@@ -28,26 +28,14 @@ Terminal::~Terminal(){
     cout<<"Terminal deconstructor called"<<endl;
 }
 void Terminal::printGrid(){
+    charGrid[cols-1][playerPos] = 'O';
     for(int y = 0; y < rows; y++){
         for(int x = 0; x < cols; x++){
-            if(obstacles[y] == x){
-                if(x == playerPos && y == rows-1){
-                    hit = true;
-                }
-                // could probably add the endgame logic in here!!!!!!!!!!!!!!!!!
-                cout<<"X";
-            }
-            else if(y==rows-1 && x == playerPos){
-                cout<<"O";
-            }
-            else{
-                cout<<charGrid[y][x];
-            }
+          charGrid[y][x];
         }
         cout<<endl;
     }
-    // sleepThread(100);
-    // system("clear");
+    charGrid[cols-1][playerPos] = ' ';
 }
 
 void Terminal::restartGame(){
@@ -59,8 +47,17 @@ void Terminal::restartGame(){
 }
 
 void Terminal::generateObstacle(){
+    for(int y = 0; y < rows; y++){
+        charGrid[y][obstacles[y]] = ' ';
+    }
     obstacles.pop_back();
     obstacles.insert(obstacles.begin(), generateNumber());
+    for(int y = 0; y < rows; y++){
+        charGrid[y][obstacles[y]] = 'X';
+    }
+    if(obstacles[rows-1] == playerPos){
+        hit = true;
+    }
 }
 
 int Terminal::generateNumber(){

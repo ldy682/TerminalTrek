@@ -5,7 +5,7 @@ Terminal::Terminal(){
     rows = 15;
     cols = 15;
     playerPos = cols/2;
-    
+
     // initializes the grid
     charGrid.resize(rows, std::vector<char>(cols, ' '));
 
@@ -34,14 +34,20 @@ void Terminal::printGrid(){
         }
         cout<<endl;
     }
-
+    charGrid[cols-1][playerPos] = ' ';
 }
 
 void Terminal::generateObstacle(){
+    for(int y = 0; y < rows; y++){
+        charGrid[y][obstacles[y]] = ' ';
+    }
     obstacles.pop_back();
     obstacles.insert(obstacles.begin(), generateNumber());
     for(int y = 0; y < rows; y++){
         charGrid[y][obstacles[y]] = 'X';
+    }
+    if(obstacles[rows-1] == playerPos){
+    //    end game
     }
 }
 

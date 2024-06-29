@@ -77,7 +77,7 @@ static void obstacleThreadFn(std::shared_ptr<Terminal> terminal){
 
 void mapPrintThreadFn(std::shared_ptr<Terminal> terminal){
     
-    while(!stop && !terminal->hit){
+    while(!stop){
         auto start = high_resolution_clock::now();
         while(!terminal->hit){
             system("clear");
@@ -89,8 +89,9 @@ void mapPrintThreadFn(std::shared_ptr<Terminal> terminal){
         cout<<"Time survived in ms: "<<duration.count()<<endl;
         cout<<"Joystick Up: Game restart "<<endl;
         cout<<"Joystick Down: Quit game"<<endl;
-        // system("clear");
-        
+        while(terminal->hit && !stop){
+            sleepThread(50);
+        }
     }
 }
 

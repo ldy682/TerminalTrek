@@ -14,8 +14,6 @@ class Terminal {
         void printGrid();
         void generateObstacle();
         void restartGame();
-        void startTime();
-        void endTime();
         bool hit;
     private:
         int playerPos;

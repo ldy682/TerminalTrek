@@ -31,17 +31,26 @@ void Terminal::printGrid(){
     charGrid[cols-1][playerPos] = 'O';
     for(int y = 0; y < rows; y++){
         for(int x = 0; x < cols; x++){
-          charGrid[y][x];
+          cout<<charGrid[y][x];
         }
         cout<<endl;
     }
-    charGrid[cols-1][playerPos] = ' ';
+    charGrid[rows-1][playerPos] = ' ';
 }
 
 void Terminal::restartGame(){
-    // for(long unsigned int i = 0; i < obstacles.size(); i++){
-    //     obstacles[i] = -1;
-    // }
+    charGrid.resize(rows, std::vector<char>(cols, ' '));
+    for(int y = 0; y < rows; y++){
+        charGrid[y][obstacles[y]] = ' ';
+    }
+    // sets the sides
+    for(int y = 0; y < rows; y++){
+        for(int x = 0; x < cols; x++){
+            if(x == 0 || x == (cols-1)){
+                charGrid[y][x] = '|';
+            }
+        }
+    }
     std::fill(obstacles.begin(), obstacles.end(), -1);
     hit = false;
 }

@@ -5,7 +5,7 @@ Terminal::Terminal(){
     rows = 15;
     cols = 15;
     playerPos = cols/2;
-    // charGrid(rows, vector<char>(cols, ' '));
+    
     // initializes the grid
     charGrid.resize(rows, std::vector<char>(cols, ' '));
 
@@ -27,28 +27,22 @@ Terminal::~Terminal(){
 
 }
 void Terminal::printGrid(){
+    charGrid[cols-1][playerPos] = 'O';
     for(int y = 0; y < rows; y++){
         for(int x = 0; x < cols; x++){
-            if(y==rows-1 && x == playerPos){
-                cout<<"O";
-            }
-            else if(obstacles[y] == x){
-                // could probably add the endgame logic in here!!!!!!!!!!!!!!!!!
-                cout<<"X";
-            }
-            else{
-                cout<<charGrid[y][x];
-            }
+            cout<<charGrid[y][x];
         }
         cout<<endl;
     }
-    // sleepThread(100);
-    // system("clear");
+
 }
 
 void Terminal::generateObstacle(){
     obstacles.pop_back();
     obstacles.insert(obstacles.begin(), generateNumber());
+    for(int y = 0; y < rows; y++){
+        charGrid[y][obstacles[y]] = 'X';
+    }
 }
 
 int Terminal::generateNumber(){

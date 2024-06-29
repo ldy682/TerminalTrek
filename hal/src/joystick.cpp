@@ -10,8 +10,6 @@ Joystick::Joystick(){
     runCommand("config-pin p8.16 gpio");
     runCommand("config-pin p8.18 gpio");
     runCommand("config-pin p8.17 gpio");
-    runCommand("config-pin p9_18 i2c");
-    runCommand("config-pin p9_17 i2c");
 
     // config joystick pins for input
     writeToFile("/sys/class/gpio/gpio26/direction", "in");
@@ -22,7 +20,7 @@ Joystick::Joystick(){
 }
 
 Joystick::~Joystick(){
-
+    std::cout<<"Joystick deconstructor called"<<std::endl;
 }
 
 void Joystick::updateDirection(){

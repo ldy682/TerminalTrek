@@ -2,6 +2,7 @@
 using namespace std;
 
 Terminal::Terminal(){
+    hit = false;
     rows = 15;
     cols = 15;
     playerPos = cols/2;
@@ -24,17 +25,25 @@ Terminal::Terminal(){
     }
 }
 Terminal::~Terminal(){
-
+    cout<<"Terminal deconstructor called"<<endl;
 }
 void Terminal::printGrid(){
     charGrid[cols-1][playerPos] = 'O';
     for(int y = 0; y < rows; y++){
         for(int x = 0; x < cols; x++){
-            cout<<charGrid[y][x];
+          charGrid[y][x];
         }
         cout<<endl;
     }
     charGrid[cols-1][playerPos] = ' ';
+}
+
+void Terminal::restartGame(){
+    // for(long unsigned int i = 0; i < obstacles.size(); i++){
+    //     obstacles[i] = -1;
+    // }
+    std::fill(obstacles.begin(), obstacles.end(), -1);
+    hit = false;
 }
 
 void Terminal::generateObstacle(){
@@ -47,7 +56,7 @@ void Terminal::generateObstacle(){
         charGrid[y][obstacles[y]] = 'X';
     }
     if(obstacles[rows-1] == playerPos){
-    //    end game
+        hit = true;
     }
 }
 

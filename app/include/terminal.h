@@ -13,11 +13,17 @@ class Terminal {
         void moveRight();
         void printGrid();
         void generateObstacle();
+        void restartGame();
+        void startTime();
+        void endTime();
+        bool hit;
     private:
         int playerPos;
         int rows;
         int cols;
         int time;
+        // auto start;
+        // auto time;
         std::shared_mutex mutx;
         std::vector<std::vector<char>> charGrid;
         std::vector<int> obstacles;

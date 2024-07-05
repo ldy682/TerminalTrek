@@ -121,6 +121,6 @@ void app_init(){
 
 void wait_shutdown(){
     while(!stop){
-        sleepThread(100);
+        sleepThread(200);
     }
 }

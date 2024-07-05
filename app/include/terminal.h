@@ -20,9 +20,8 @@ class Terminal {
         int rows;
         int cols;
         int time;
-        // auto start;
-        // auto time;
-        std::shared_mutex mutx;
+        std::shared_mutex gridMutx;
+        std::shared_mutex playerMutx;
         std::vector<std::vector<char>> charGrid;
         std::vector<int> obstacles;
         int generateNumber();

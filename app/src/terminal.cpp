@@ -28,6 +28,12 @@ Terminal::~Terminal(){
     cout<<"Terminal deconstructor called"<<endl;
 }
 void Terminal::printGrid(){
+    static int prevPlayerPos = playerPos;
+    gridMutx.lock_shared();
+    if (prevPlayerPos != playerPos) {
+        charGrid[rows-1][prevPlayerPos] = ' ';
+        prevPlayerPos = playerPos;
+    }
     charGrid[cols-1][playerPos] = 'O';
     for(int y = 0; y < rows; y++){
         for(int x = 0; x < cols; x++){
@@ -36,6 +42,7 @@ void Terminal::printGrid(){
         cout<<endl;
     }
     charGrid[rows-1][playerPos] = ' ';
+    gridMutx.unlock_shared();
 }
 
 void Terminal::restartGame(){
@@ -56,6 +63,7 @@ void Terminal::restartGame(){
 }
 
 void Terminal::generateObstacle(){
+    gridMutx.lock();
     for(int y = 0; y < rows; y++){
         charGrid[y][obstacles[y]] = ' ';
     }
@@ -67,6 +75,7 @@ void Terminal::generateObstacle(){
     if(obstacles[rows-1] == playerPos){
         hit = true;
     }
+    gridMutx.unlock();
 }
 
 int Terminal::generateNumber(){
@@ -74,12 +83,16 @@ int Terminal::generateNumber(){
 }
 
 void Terminal::moveLeft(){
+    playerMutx.lock();
     if(playerPos > 1){
         playerPos--;
     }
+    playerMutx.unlock();
 }
 void Terminal::moveRight(){
+    playerMutx.lock();
     if(playerPos < cols - 2){
         playerPos++;
     }
+    playerMutx.unlock();
 }

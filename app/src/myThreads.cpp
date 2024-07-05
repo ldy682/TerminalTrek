@@ -17,6 +17,10 @@ using std::endl;
 using namespace std::chrono;
 
 bool stop = false;
+std::thread joystickThread;
+std::thread accPlayerTh;
+std::thread terminalBoardTh;
+std::thread mapPrintTh;
 
 
 static void accPlayerThreadFn(std::unique_ptr<Accelerometer> acc,
@@ -105,16 +109,11 @@ void app_init(){
     std::unique_ptr<Joystick> joystick = std::make_unique<Joystick>();
 
     // load the threads with hardware first
-    std::thread joystickThread(joystickThreadFn, std::move(joystick), std::move(terminalPtr1));
-    std::thread accPlayerTh(accPlayerThreadFn, std::move(acc), std::move(terminalPtr2));
-    std::thread terminalBoardTh(obstacleThreadFn, std::move(terminalPtr3));
-    std::thread mapPrintTh(mapPrintThreadFn, std::move(terminalPtr4));
-
-    std::cout<<"terminal threads executed"<<std::endl;
-    terminalBoardTh.detach();
-    accPlayerTh.detach();
-    mapPrintTh.detach();
-    joystickThread.detach();
+    joystickThread = std::thread(joystickThreadFn, std::move(joystick), std::move(terminalPtr1));
+    accPlayerTh = std::thread(accPlayerThreadFn, std::move(acc), std::move(terminalPtr2));
+    terminalBoardTh = std::thread(obstacleThreadFn, std::move(terminalPtr3));
+    mapPrintTh = std::thread(mapPrintThreadFn, std::move(terminalPtr4));
+    
 }
 
 
@@ -124,3 +123,10 @@ void wait_shutdown(){
         sleepThread(200);
     }
 }
+
+void shutdown_app(){
+    terminalBoardTh.join();
+    accPlayerTh.join();
+    mapPrintTh.join();
+    joystickThread.join();
+}   

@@ -65,12 +65,16 @@ void Terminal::restartGame(){
 void Terminal::generateObstacle(){
     gridMutx.lock();
     for(int y = 0; y < rows; y++){
-        charGrid[y][obstacles[y]] = ' ';
+        if(obstacles[y] != -1){
+            charGrid[y][obstacles[y]] = ' ';
+        }
     }
     obstacles.pop_back();
     obstacles.insert(obstacles.begin(), generateNumber());
     for(int y = 0; y < rows; y++){
-        charGrid[y][obstacles[y]] = 'X';
+        if(obstacles[y] != -1){
+            charGrid[y][obstacles[y]] = 'X';
+        }
     }
     if(obstacles[rows-1] == playerPos){
         hit = true;

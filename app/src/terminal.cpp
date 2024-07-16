@@ -25,7 +25,7 @@ Terminal::Terminal(){
     }
 }
 Terminal::~Terminal(){
-    cout<<"Terminal deconstructor called"<<endl;
+    // cout<<"Terminal deconstructor called"<<endl;
 }
 void Terminal::printGrid(){
     static int prevPlayerPos = playerPos;

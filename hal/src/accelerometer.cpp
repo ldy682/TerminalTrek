@@ -35,7 +35,7 @@ Accelerometer::Accelerometer(){
 Accelerometer::~Accelerometer(){
     // runCommand("config-pin p9.17 default");
     // runCommand("config-pin p9.18 default");
-    std::cout<<"Accelerometer deconstructor called"<<std::endl;
+    // std::cout<<"Accelerometer deconstructor called"<<std::endl;
 }
 
 

@@ -20,7 +20,7 @@ Joystick::Joystick(){
 }
 
 Joystick::~Joystick(){
-    std::cout<<"Joystick deconstructor called"<<std::endl;
+    // std::cout<<"Joystick deconstructor called"<<std::endl;
 }
 
 void Joystick::updateDirection(){
